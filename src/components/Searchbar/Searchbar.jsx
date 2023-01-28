@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
+import Notiflix from 'notiflix';
 
 import styles from './searchbar.module.scss';
 
@@ -15,7 +17,7 @@ class Searchbar extends Component {
   handleSubmit = e => {
     e.preventDefault();
     if (this.state.searchQuery.trim() === '') {
-      return;
+      return Notiflix.Notify.warning('Please write something');
     }
 
     const { onSubmit } = this.props;
@@ -54,3 +56,7 @@ class Searchbar extends Component {
 }
 
 export default Searchbar;
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

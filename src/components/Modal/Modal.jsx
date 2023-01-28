@@ -1,5 +1,5 @@
-// import { createPortal } from 'react-dom';
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './modal.module.scss';
 
@@ -8,36 +8,36 @@ class Modal extends Component {
     document.addEventListener('keydown', this.onKeyPress);
   }
 
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyPress);
+  }
+
   onKeyPress = event => {
-    if (event.keyCode === 27) {
-      this.handleCloseModal();
+    if (event.code === 'Escape') {
+      this.props.onModalClose();
     }
   };
 
-  onModalOverlayClick = () => {
-    this.handleCloseModal();
-  };
-
-  handleCloseModal = () => {
-    this.props.onModalClose();
-    document.removeEventListener('keydown', this.onKeyPress);
+  onModalOverlayClick = e => {
+    if (e.target === e.currentTarget) {
+      this.props.onModalClose();
+    }
   };
 
   render() {
     const { imgAlt, imgLargeSrc } = this.props;
 
     return (
-      <>
-        <div
-          id="overlay"
-          onClick={this.onModalOverlayClick}
-          className={styles.overlay}
-        ></div>
-        <div>
-          <img className={styles.modal} src={imgLargeSrc} alt={imgAlt} />
-        </div>
-      </>
+      <div className={styles.overlay} onClick={this.onModalOverlayClick}>
+        <img className={styles.modal} src={imgLargeSrc} alt={imgAlt} />
+      </div>
     );
   }
 }
 export default Modal;
+
+Modal.propTypes = {
+  imgAlt: PropTypes.string.isRequired,
+  imgLargeSrc: PropTypes.string.isRequired,
+  onModalClose: PropTypes.func.isRequired,
+};

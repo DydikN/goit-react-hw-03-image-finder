@@ -6,8 +6,9 @@ import Modal from './Modal/Modal';
 import Button from './Button/Button';
 import Loader from './Loader/Loader';
 
-import getImages from './services/services';
+import getImages from '../services/services';
 import styles from './app.module.scss';
+import Notiflix from 'notiflix';
 
 class App extends Component {
   state = {
@@ -39,6 +40,7 @@ class App extends Component {
         items: [...items, ...hits],
         totalHits,
       }));
+      Notiflix.Notify.success(`Found ${totalHits} images`);
     } catch (error) {
       this.setState({ error: error.message });
     } finally {
@@ -90,7 +92,6 @@ class App extends Component {
           <Modal
             imgAlt={imgAlt}
             imgLargeSrc={largeImageURL}
-            onKeyPress={this.onKeyPress}
             onModalClose={handleCloseModal}
           />
         )}
@@ -98,8 +99,11 @@ class App extends Component {
         {items.length > 0 && (
           <ImageGallery items={items} handleShowModal={handleShowModal} />
         )}
-        {error && <p className={styles.errorMessage}>{error}</p>}
-        {totalHits !== 0 && totalHits > 12 && <Button loadMore={loadMore} />}
+
+        {error && Notiflix.Notify.failure(`${error}`)}
+        {items.length > 0 && items.length < totalHits && (
+          <Button loadMore={loadMore} />
+        )}
         {loading && <Loader />}
       </div>
     );
