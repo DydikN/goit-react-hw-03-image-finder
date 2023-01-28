@@ -22,7 +22,7 @@ class Searchbar extends Component {
 
     onSubmit(this.state.searchQuery);
 
-    // this.setState({ searchQuery: '' });
+    this.setState({ searchQuery: '' });
   };
 
   render() {

@@ -19,6 +19,7 @@ class App extends Component {
     largeImageURL: '',
     imgAlt: '',
     showModal: false,
+    error: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -39,7 +40,7 @@ class App extends Component {
         totalHits,
       }));
     } catch (error) {
-      alert(error.message);
+      this.setState({ error: error.message });
     } finally {
       this.setState({ loading: false });
     }
@@ -72,8 +73,15 @@ class App extends Component {
   };
 
   render() {
-    const { items, loading, totalHits, imgAlt, largeImageURL, showModal } =
-      this.state;
+    const {
+      items,
+      loading,
+      totalHits,
+      error,
+      imgAlt,
+      largeImageURL,
+      showModal,
+    } = this.state;
     const { hadleSeachSubmit, loadMore, handleCloseModal, handleShowModal } =
       this;
     return (
@@ -87,7 +95,10 @@ class App extends Component {
           />
         )}
         <Searchbar onSubmit={hadleSeachSubmit} />
-        <ImageGallery items={items} handleShowModal={handleShowModal} />
+        {items.length > 0 && (
+          <ImageGallery items={items} handleShowModal={handleShowModal} />
+        )}
+        {error && <p className={styles.errorMessage}>{error}</p>}
         {totalHits !== 0 && totalHits > 12 && <Button loadMore={loadMore} />}
         {loading && <Loader />}
       </div>
