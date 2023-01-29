@@ -14,5 +14,5 @@ const Button = ({ loadMore }) => {
 export default Button;
 
 Button.propTypes = {
-  loadMore: PropTypes.func,
+  loadMore: PropTypes.func.isRequired,
 };
